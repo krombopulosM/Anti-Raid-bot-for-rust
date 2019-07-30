@@ -1,3 +1,6 @@
+import os
+import os.path
+from os import path
 import numpy as np
 from PIL import ImageGrab
 import cv2
@@ -7,7 +10,7 @@ import discord
 from discord.ext import commands
 import asyncio
 
-description = '''Rust Anti-Raid Bot made by Randolf, Version 1.0.0'''
+description = '''Rust Anti-Raid Bot made by Randolf, Version 1.1.0'''
 bot = commands.Bot(command_prefix='!', description=description)
 bot.raid_bot_channel = ''
 
@@ -15,10 +18,22 @@ bot.raid_bot_channel = ''
 pytesseract.pytesseract.tesseract_cmd = "C:\Program Files (x86)\Tesseract-OCR\\tesseract.exe"
 
 
+home = os.path.expanduser('~')
+home
+print('checking for token file...')
+try:
+    with open(home +'\KEEP-ME.txt') as file_in:
+        token = file_in.readline()
+except FileNotFoundError:
+    token = input('Enter your discord bot token > ')
+    with open(home +'\KEEP-ME.txt', 'w') as file_out:
+        file_out.write(token)
+
+
 @bot.event
 async def on_ready():
     print("Started Rust Anti-Raid Bot")
-    print ("Version 1.0.0 by Randolf")
+    print ("Version 1.1.0 by Randolf")
 
 
 @bot.command(name="archannel", pass_context=True)
@@ -77,7 +92,8 @@ async def main():
         if process_img(img):
             bot.loop.create_task(raid("@everyone You're being raided!", bot.raid_bot_channel))
             cv2.destroyAllWindows()
-            break
+            await asyncio.sleep(3)
+            continue
 
         # end script if 'q' is pressed in cv2 window
         if cv2.waitKey(25) & 0xFF == ord('q'):
@@ -92,4 +108,4 @@ async def main():
 
         asyncio.sleep(5)
 #Enter your discord bot token here
-bot.run('')
+bot.run(token)
