@@ -1,6 +1,6 @@
 # Rust Anti-Raid bot
 
-Rust Anti-raid bot for detecting intruders and reporting back to your discord server. Made in Python 3.6 and Tesseract-OCR, it monitors if the "Respawn" button is located in the bottom right (indicating death) and will then @everyone in the channel specified.
+Rust Anti-raid bot for detecting intruders and reporting back to your discord server. Made in Python 3.6 and Tesseract-OCR, it monitors if the "Respawn" button is located in the bottom right (indicating death) and will then @everyone in the channel specified every X seconds (default is 3).
 
 
 # Usage
@@ -12,9 +12,14 @@ The Discord bot comes with several commands, which are used to control how to bo
 !arscreenshot | Takes a screenshot of the bots screen and publishes it to the channel<br>
 !arstart | Starts monitoring for the "Respawn" button in order to alert your channel<br>
 
-once !arstart has been initilized a new window will appear with the contents of the bottom right screen, indicating monitor-mode, once it reads "Respawn" it will close down the window and alert the channel, you can stop Monitoring my pressing "Q" inside of the window and start it back up again with !arstart.
+once !arstart has been initilized a new window will appear with the contents of the bottom right screen, indicating monitor-mode, once it reads "Respawn" it will alert the channel, you can stop Monitoring by closing down the application.
 
 ![Discord Commands](https://i.imgur.com/f0q68if.png)
+
+# Pre-compiled
+
+you can download the compiled file [here](https://anonfile.com/s5569b19nd/Anti-Raid_exe), it's still required you install [Tesseract-OCR](https://github.com/tesseract-ocr/tesseract/wiki/4.0-with-LSTM#400-alpha-for-windows) to your C:\Program Files (x86)\Tesseract-OCR.
+once installed open the file and it will begin checking for an existing discord bot token, if one is not found you can create one from [here](https://discordapp.com/developers/applications/) and paste it in, The token is then saved and memorized for the next time you boot the program.
 
 # Setup
 
