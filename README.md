@@ -23,9 +23,9 @@ once installed open the file and it will begin checking for an existing discord 
 
 # Setup
 
-The script was made using Python 3.6, Tesseract-OCR and Discord.py version 0.6. To modify/compile you will need the following Modules:
+The script was made using Python 3.6, Tesseract-OCR and Discord.py version 1.7.3. To modify/compile you will need the following Modules:
 
-pip install discord.py==0.16.12<br>
+pip install discord.py==1.7.3<br>
 pip install numpy<br>
 pip install pillow<br>
 pip install opencv-python<br>
