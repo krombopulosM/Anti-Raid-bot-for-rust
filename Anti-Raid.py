@@ -12,7 +12,8 @@ import asyncio
 
 description = '''Rust Anti-Raid Bot made by Randolf, Version 1.1.0'''
 bot = commands.Bot(command_prefix='!', description=description)
-bot.raid_bot_channel = ''
+
+bot.raid_bot_channel = 0 # changed to int
 
 # setting up OCR
 pytesseract.pytesseract.tesseract_cmd = "C:\Program Files (x86)\Tesseract-OCR\\tesseract.exe"
@@ -33,51 +34,53 @@ except FileNotFoundError:
 @bot.event
 async def on_ready():
     print("Started Rust Anti-Raid Bot")
-    print ("Version 1.1.0 by Randolf")
+    print("Version 1.1.0 by Randolf")
+    await main()
 
 
-@bot.command(name="archannel", pass_context=True)
+@bot.command()
 async def archannel(ctx):
     """Changes notification channel to current channel"""
-    await bot.say('Successfully changed notification channel to #' + ctx.message.channel.name)
+    await ctx.send('Successfully changed notification channel to #' + ctx.message.channel.name)
     bot.raid_bot_channel = ctx.message.channel.id
 
 
-@bot.command(name="arstart", pass_context=True)
+@bot.command()
 async def arstart(ctx):
     """Starts Rust Anti-Raid Bot"""
-    if bot.get_channel(bot.raid_bot_channel) is None:
-        await bot.say('A notification channel has not been set. Please first set your notification channel with '
+    if bot.get_channel(int(bot.raid_bot_channel)) is None:
+        await ctx.send('A notification channel has not been set. Please first set your notification channel with '
                       '"!archannel" in the channel you would like.')
         return
-    await bot.say('Successfully started Rust Anti-Raid Bot')
+    await ctx.send('Successfully started Rust Anti-Raid Bot')
     bot.loop.create_task(main())
 
 
-@bot.command(name="arscreenshot", pass_context=True)
+@bot.command()
 async def arscreenshot(ctx):
     """Takes a screenshot"""
     screenshot = ImageGrab.grab()
     screenshot.save('screenshot.png')
-    await bot.send_file(ctx.message.channel, 'screenshot.png')
+    await ctx.send(file=discord.File('screenshot.png'))
+
 
 
 # sending message to discord
 async def raid(message, channel):
-    await bot.send_message(bot.get_channel(channel), message)
+    channel = bot.get_channel(int(channel))
+    await channel.send(message)
 
 
 # checking if image text = 'respawn' with OCR
 def process_img(grey_img):
     txt = pytesseract.image_to_string(grey_img)
-    if txt == "RESPAWN":
+    if "respawn" in txt.lower():
         return True
     return False
 
 
 # start rust anti-raid bot
 async def main():
-    await bot.wait_until_ready()
 
     food_counter = 0
 
@@ -87,7 +90,6 @@ async def main():
         img = np.array(img)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         cv2.imshow('window', img)
-
         # if image text = 'respawn' call raid() function and end script
         if process_img(img):
             bot.loop.create_task(raid("@everyone You're being raided!", bot.raid_bot_channel))
@@ -106,6 +108,8 @@ async def main():
             pyautogui.keyUp('6')
             food_counter = 0
 
-        asyncio.sleep(5)
+        await asyncio.sleep(5)
+
+
 #Enter your discord bot token here
 bot.run(token)
